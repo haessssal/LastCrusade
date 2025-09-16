@@ -35,7 +35,7 @@ public class ReadyManager : MonoBehaviour
     {
         if (GameManager.instance.player1Data != null && GameManager.instance.player2Data != null)
         {
-            SceneManager.LoadScene("2.Main");
+            FadeManager.Instance.LoadScene("2.Main");
         }
 
         else Debug.Log("Both players must select a character");
