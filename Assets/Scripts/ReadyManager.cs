@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 using TMPro;
 
 public class ReadyManager : MonoBehaviour
@@ -23,21 +24,28 @@ public class ReadyManager : MonoBehaviour
     {
         GameManager.instance.player1Data = selectedCharacter;
         Debug.Log("P1: " + GameManager.instance.player1Data.characterName);
+        CheckTransition();
     }
 
     public void ConfirmCharacter2()
     {
         GameManager.instance.player2Data = selectedCharacter;
         Debug.Log("P2: " + GameManager.instance.player2Data.characterName);
+        CheckTransition();
     }
 
-    public void GoToMainScene()
+    private void CheckTransition()
     {
         if (GameManager.instance.player1Data != null && GameManager.instance.player2Data != null)
         {
-            FadeManager.Instance.LoadScene("2.Main");
+            StartCoroutine(GoToMainSceneAfterDelay());
         }
+    }
 
-        else Debug.Log("Both players must select a character");
+    private IEnumerator GoToMainSceneAfterDelay()
+    {
+        yield return new WaitForSeconds(1.0f);
+        
+        FadeManager.Instance.LoadScene("2.Main");
     }
 }

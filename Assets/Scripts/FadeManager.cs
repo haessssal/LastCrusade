@@ -61,6 +61,7 @@ public class FadeManager : MonoBehaviour
             canvasGroup.alpha = 1f;
             StartCoroutine(Fade(0, fadeDuration));
         }
+        
         else isFading = false;
     }
 
