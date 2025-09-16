@@ -8,4 +8,5 @@ public class CharacterData : ScriptableObject
     public float mpSpeed;
     public float moveSpeed;
     public float attackSpeed;
+    public GameObject characterPrefab; 
 }

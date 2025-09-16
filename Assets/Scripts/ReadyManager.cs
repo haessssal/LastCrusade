@@ -1,21 +1,43 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class ReadyManager : MonoBehaviour
 {
-    public CharacterData character1;
-    public CharacterData character2;
+    private CharacterData selectedCharacter;
+    public TextMeshProUGUI infoText;
+
+    public void SelectCharacter(CharacterData characterData)
+    {
+        infoText.text =
+            "Name: " + characterData.characterName + "\n" +
+            "HP: " + characterData.hp + "\n" +
+            "MP Speed: " + characterData.mpSpeed + "\n" +
+            "Move Speed: " + characterData.moveSpeed + "\n" +
+            "Attack Speed: " + characterData.attackSpeed;
+        
+        selectedCharacter = characterData;
+    }
+
+    public void ConfirmCharacter1()
+    {
+        GameManager.instance.player1Data = selectedCharacter;
+        Debug.Log("P1: " + GameManager.instance.player1Data.characterName);
+    }
+
+    public void ConfirmCharacter2()
+    {
+        GameManager.instance.player2Data = selectedCharacter;
+        Debug.Log("P2: " + GameManager.instance.player2Data.characterName);
+    }
 
     public void GoToMainScene()
     {
-        if (character1 != null && character2 != null)
+        if (GameManager.instance.player1Data != null && GameManager.instance.player2Data != null)
         {
-            GameManager.instance.player1Data = character1;
-            GameManager.instance.player2Data = character2;
-
-            Debug.Log("P1: " + character1.characterName + "\n" + "P2: " + character2.characterName);
-
             SceneManager.LoadScene("2.Main");
         }
+
+        else Debug.Log("Both players must select a character");
     }
 }

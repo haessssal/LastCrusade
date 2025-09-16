@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 83c304ed3626a4859889454d6233034f, type: 3}
-  m_Name: Character1
+  m_Name: Character3
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  characterName: Character1
-  hp: 100
-  mpSpeed: 2
-  moveSpeed: 3
+  characterName: Character3
+  hp: 70
+  mpSpeed: 6
+  moveSpeed: 5
   attackSpeed: 5
   characterPrefab: {fileID: 2063671535301401377, guid: d4bce184f720c4dc896cf20413a3e2bb, type: 3}
