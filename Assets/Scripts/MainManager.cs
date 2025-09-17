@@ -1,13 +1,63 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MainManager : MonoBehaviour
 {
     public Transform player1SpawnPoint;
     public Transform player2SpawnPoint;
 
-    void Start()
+    public TextMeshProUGUI timerText;
+    // P1 UI
+    public TextMeshProUGUI p1NameText;
+    public TextMeshProUGUI p1HpText;
+    public TextMeshProUGUI p1MpText;
+    // P2 UI
+    public TextMeshProUGUI p2NameText;
+    public TextMeshProUGUI p2HpText;
+    public TextMeshProUGUI p2MpText;    
+
+    private float matchTime = 120f;
+    private bool isMatchOver = false;
+
+    private void Start()
     {
         SpawnCharacters();
+        SetPlayerUI();
+    }
+
+    private void Update()
+    {
+        if (!isMatchOver)
+        {
+            matchTime -= Time.deltaTime;
+            timerText.text = Mathf.Max(0, Mathf.FloorToInt(matchTime)).ToString();
+
+            if (matchTime <= 0)
+            {
+                isMatchOver = true;
+                // TODO
+            }
+        }
+    }
+
+    private void SetPlayerUI()
+    {
+        // P1 UI set
+        CharacterData p1Data = GameManager.instance.player1Data;
+        if (p1Data != null)
+        {
+            p1NameText.text = p1Data.characterName;
+            p1HpText.text = p1Data.hp.ToString();
+        }
+
+        // P2 UI set
+        CharacterData p2Data = GameManager.instance.player2Data;
+        if (p2Data != null)
+        {
+            p2NameText.text = p2Data.characterName;
+            p2HpText.text = p2Data.hp.ToString();
+        }
     }
 
     private void SpawnCharacters()

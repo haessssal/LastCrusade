@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     public CharacterData player1Data;
     public CharacterData player2Data;
 
-    void Awake()
+    private void Awake()
     {
         if (instance == null)
         {

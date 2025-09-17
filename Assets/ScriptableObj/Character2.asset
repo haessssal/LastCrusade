@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   characterName: Character2
   hp: 90
+  mp: 45
   mpSpeed: 3
   moveSpeed: 7
   attackSpeed: 3
