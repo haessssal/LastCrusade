@@ -1,0 +1,13 @@
+Font: Black Ops One  Style: Regular
+Point Size: 615   Padding: 24   SP/PD Ratio: 3.9%
+
+Characters included: 98/99
+Missing characters: 1
+Excluded characters: 0
+
+Characters missing from font file:
+----------------------------------------
+ID: 9633	Hex: 25A1	Char [□]
+
+Characters excluded from packing:
+----------------------------------------
