@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+// win/lose 판정 및 아이템 
 public class MainManager : MonoBehaviour
 {
     public Transform player1SpawnPoint;
@@ -15,7 +16,7 @@ public class MainManager : MonoBehaviour
     // P2 UI
     public TextMeshProUGUI p2NameText;
     public TextMeshProUGUI p2HpText;
-    public TextMeshProUGUI p2MpText;    
+    public TextMeshProUGUI p2MpText;
 
     private float matchTime = 120f;
     private bool isMatchOver = false;
@@ -67,7 +68,7 @@ public class MainManager : MonoBehaviour
         if (p1Data != null)
         {
             GameObject player1Object = Instantiate(p1Data.characterPrefab, player1SpawnPoint.position, Quaternion.identity);
-            HeroKnight player1Script = player1Object.GetComponent<HeroKnight>();
+            Player player1Script = player1Object.GetComponent<Player>();
             if (player1Script != null) player1Script.SetCharacterStats(p1Data);
         }
 
@@ -76,7 +77,7 @@ public class MainManager : MonoBehaviour
         if (p2Data != null)
         {
             GameObject player2Object = Instantiate(p2Data.characterPrefab, player2SpawnPoint.position, Quaternion.identity);
-            HeroKnight player2Script = player2Object.GetComponent<HeroKnight>();
+            Player player2Script = player2Object.GetComponent<Player>();
             if (player2Script != null) player2Script.SetCharacterStats(p2Data);
         }
     }

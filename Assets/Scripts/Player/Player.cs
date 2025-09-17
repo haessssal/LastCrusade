@@ -2,7 +2,8 @@
 using System.Collections;
 using UnityEngine.InputSystem;
 
-public class HeroKnight : MonoBehaviour 
+// character 움직임 담당
+public class Player : MonoBehaviour
 {
     [SerializeField] float speed = 4.0f;
     [SerializeField] float jumpForce = 7.5f;
@@ -35,8 +36,8 @@ public class HeroKnight : MonoBehaviour
         attackSpeed = data.attackSpeed;
         Debug.Log($"character stat: hp {hp} / mp {mpSpeed} / move {speed} / attack {attackSpeed}");
     }
-    
-    void Start ()
+
+    void Start()
     {
         animator = GetComponent<Animator>();
         body2d = GetComponent<Rigidbody2D>();
@@ -48,7 +49,7 @@ public class HeroKnight : MonoBehaviour
 
         heroControls = new HeroControls();
         heroControls.Player.Enable();
-        
+
         // Move 값 저장
         heroControls.Player.Move.performed += ctx => inputX = ctx.ReadValue<Vector2>().x;
         heroControls.Player.Move.canceled += ctx => inputX = 0f;
@@ -57,8 +58,8 @@ public class HeroKnight : MonoBehaviour
         heroControls.Player.Jump.performed += ctx => Jump();
         heroControls.Player.Attack.performed += ctx => Attack();
     }
-    
-    void Update ()
+
+    void Update()
     {
         timeSinceAttack += Time.deltaTime;
 
@@ -94,7 +95,7 @@ public class HeroKnight : MonoBehaviour
         // -- Handle Animations --
         isWallSliding = (wallSensorR1.State() && wallSensorR2.State()) || (wallSensorL1.State() && wallSensorL2.State());
         animator.SetBool("WallSlide", isWallSliding);
-            
+
         if (Mathf.Abs(inputX) > Mathf.Epsilon)
         {
             delayToIdle = 0.05f;
@@ -103,7 +104,7 @@ public class HeroKnight : MonoBehaviour
         else
         {
             delayToIdle -= Time.deltaTime;
-            if(delayToIdle < 0)
+            if (delayToIdle < 0)
                 animator.SetInteger("AnimState", 0);
         }
     }
@@ -122,7 +123,7 @@ public class HeroKnight : MonoBehaviour
 
     private void Attack()
     {
-        if(timeSinceAttack > 0.25f)
+        if (timeSinceAttack > 0.25f)
         {
             currentAttack++;
 
