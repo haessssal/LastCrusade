@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
     public int p1Wins = 0;
     public int p2Wins = 0;
     public int matchCount = 0;
+    public List<string> matchResults = new List<string>();
 
     private void Awake()
     {
