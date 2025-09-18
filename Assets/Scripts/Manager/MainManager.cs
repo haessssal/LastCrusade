@@ -8,6 +8,8 @@ public class MainManager : MonoBehaviour
     public Transform player2SpawnPoint;
     public PlayerUI p1UI;
     public PlayerUI p2UI;
+    private PlayerStats p1Stats;
+    private PlayerStats p2Stats;
 
     public TextMeshProUGUI timerText;
     private float matchTime = 120f;
@@ -52,21 +54,10 @@ public class MainManager : MonoBehaviour
 
     private void CheckDraw()
     {
-        PlayerStats[] allPlayers = Object.FindObjectsByType<PlayerStats>(FindObjectsSortMode.None);
-
-        PlayerStats p1 = null;
-        PlayerStats p2 = null;
-
-        foreach (var ps in allPlayers)
+        if (p1Stats != null && p2Stats != null)
         {
-            if (ps.playerIndex == 1) p1 = ps;
-            else if (ps.playerIndex == 2) p2 = ps;
-        }
-
-        if (p1 != null && p2 != null)
-        {
-            if (p1.CurrentHp > 0 && p2.CurrentHp > 0) Debug.Log("무승부!");
-            else if (p1.CurrentHp < 0) Debug.Log("P2 승리!");
+            if (p1Stats.CurrentHp > 0 && p2Stats.CurrentHp > 0) Debug.Log("무승부!");
+            else if (p1Stats.CurrentHp < 0) Debug.Log("P2 승리!");
             else Debug.Log("P1 승리!");
         }
     }
@@ -78,12 +69,13 @@ public class MainManager : MonoBehaviour
         if (p1Data != null)
         {
             GameObject player1Object = Instantiate(p1Data.characterPrefab, player1SpawnPoint.position, Quaternion.identity);
-            PlayerStats p1Stats = player1Object.GetComponent<PlayerStats>();
+            p1Stats = player1Object.GetComponent<PlayerStats>();
             if (p1Stats != null)
             {
                 p1Stats.InitializeStats(p1Data, 1);
                 player1Object.GetComponent<Player>().Initialize(p1Stats);
             }
+
             if (p1UI != null) p1UI.SetupPlayerUI(p1Stats, p1Data);
         }
 
@@ -92,13 +84,26 @@ public class MainManager : MonoBehaviour
         if (p2Data != null)
         {
             GameObject player2Object = Instantiate(p2Data.characterPrefab, player2SpawnPoint.position, Quaternion.identity);
-            PlayerStats p2Stats = player2Object.GetComponent<PlayerStats>();
+            p2Stats = player2Object.GetComponent<PlayerStats>();
             if (p2Stats != null)
             {
                 p2Stats.InitializeStats(p2Data, 2);
                 player2Object.GetComponent<Player>().Initialize(p2Stats);
             }
+
             if (p2UI != null) p2UI.SetupPlayerUI(p2Stats, p2Data);
         }
+    }
+
+    // test function
+    public void P1Demage()
+    {
+        if (p1Stats != null) p1Stats.TakeDamage(20f);
+    }
+
+    // [수정] P2에게 데미지를 입히는 테스트 함수
+    public void P2Demage()
+    {
+        if (p2Stats != null) p2Stats.TakeDamage(20f);
     }
 }
