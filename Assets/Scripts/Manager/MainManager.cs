@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 using TMPro;
 
 public class MainManager : MonoBehaviour
@@ -15,8 +16,11 @@ public class MainManager : MonoBehaviour
     private float matchTime = 120f;
     private bool isMatchOver = false;
 
+    public TextMeshProUGUI winnerText;
+
     private void Start()
     {
+        winnerText.gameObject.SetActive(false);
         SpawnCharacters();
 
         // 플레이어 죽음 이벤트 구독
@@ -38,7 +42,7 @@ public class MainManager : MonoBehaviour
             if (matchTime <= 0)
             {
                 isMatchOver = true;
-                CheckDraw();
+                CheckWinLose(0); // 무승부
             }
         }
     }
@@ -48,19 +52,36 @@ public class MainManager : MonoBehaviour
         if (isMatchOver) return;
 
         isMatchOver = true;
-        if (playerIndex == 1) Debug.Log("P2 승리!");
-        else if (playerIndex == 2) Debug.Log("P1 승리!");
+        if (p1Stats.CurrentHp > 0 && p2Stats.CurrentHp > 0) winnerText.text = "DRAW"; // time over
+        else if (p1Stats.CurrentHp <= 0)
+        {
+            GameManager.instance.p2Wins += 1;
+            winnerText.text = "WINNER: P2";
+        }
+
+        else if (p2Stats.CurrentHp <= 0)
+        {
+            GameManager.instance.p1Wins += 1;
+            winnerText.text = "WINNER: P1";
+        }
+
+        winnerText.gameObject.SetActive(true);
+        GameManager.instance.matchCount += 1;
+
+        StartCoroutine(GoToResultSceneAfterDelay());
     }
 
-    private void CheckDraw()
+    private IEnumerator GoToResultSceneAfterDelay()
     {
-        if (p1Stats != null && p2Stats != null)
-        {
-            if (p1Stats.CurrentHp > 0 && p2Stats.CurrentHp > 0) Debug.Log("무승부!");
-            else if (p1Stats.CurrentHp < 0) Debug.Log("P2 승리!");
-            else Debug.Log("P1 승리!");
-        }
+        yield return new WaitForSeconds(1.0f);
+        
+        if (GameManager.instance.p1Wins >= 2 || GameManager.instance.p2Wins >= 2) FadeManager.Instance.LoadScene("3.Result");
+        // 2라운드까지 승패가 결정되지 않았을 경우 3라운드로
+        else if (GameManager.instance.matchCount < 3) FadeManager.Instance.LoadScene("2.Main");
+        // 3라운드까지 진행된 후 최종 결과로 이동
+        else FadeManager.Instance.LoadScene("3.Result");
     }
+
 
     private void SpawnCharacters()
     {
