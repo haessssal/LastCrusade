@@ -2,14 +2,9 @@
 using System.Collections;
 using UnityEngine.InputSystem;
 
-// character 움직임 담당
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour 
 {
-    [SerializeField] float speed = 4.0f;
     [SerializeField] float jumpForce = 7.5f;
-    [SerializeField] private float hp;
-    [SerializeField] private float mpSpeed;
-    [SerializeField] private float attackSpeed;
 
     private Animator animator;
     private Rigidbody2D body2d;
@@ -27,17 +22,14 @@ public class Player : MonoBehaviour
 
     private HeroControls heroControls;
     private float inputX;
+    private PlayerStats stats;
 
-    public void SetCharacterStats(CharacterData data)
+    public void Initialize(PlayerStats playerStats)
     {
-        hp = data.hp;
-        mpSpeed = data.mpSpeed;
-        speed = data.moveSpeed;
-        attackSpeed = data.attackSpeed;
-        Debug.Log($"character stat: hp {hp} / mp {mpSpeed} / move {speed} / attack {attackSpeed}");
+        stats = playerStats;
     }
 
-    void Start()
+    void Start ()
     {
         animator = GetComponent<Animator>();
         body2d = GetComponent<Rigidbody2D>();
@@ -49,7 +41,7 @@ public class Player : MonoBehaviour
 
         heroControls = new HeroControls();
         heroControls.Player.Enable();
-
+        
         // Move 값 저장
         heroControls.Player.Move.performed += ctx => inputX = ctx.ReadValue<Vector2>().x;
         heroControls.Player.Move.canceled += ctx => inputX = 0f;
@@ -58,8 +50,8 @@ public class Player : MonoBehaviour
         heroControls.Player.Jump.performed += ctx => Jump();
         heroControls.Player.Attack.performed += ctx => Attack();
     }
-
-    void Update()
+    
+    void Update ()
     {
         timeSinceAttack += Time.deltaTime;
 
@@ -89,13 +81,13 @@ public class Player : MonoBehaviour
             facingDirection = -1;
         }
 
-        body2d.linearVelocity = new Vector2(inputX * speed, body2d.linearVelocity.y);
+        body2d.linearVelocity = new Vector2(inputX * stats.moveSpeed, body2d.linearVelocity.y);
         animator.SetFloat("AirSpeedY", body2d.linearVelocity.y);
 
         // -- Handle Animations --
         isWallSliding = (wallSensorR1.State() && wallSensorR2.State()) || (wallSensorL1.State() && wallSensorL2.State());
         animator.SetBool("WallSlide", isWallSliding);
-
+            
         if (Mathf.Abs(inputX) > Mathf.Epsilon)
         {
             delayToIdle = 0.05f;
@@ -104,7 +96,7 @@ public class Player : MonoBehaviour
         else
         {
             delayToIdle -= Time.deltaTime;
-            if (delayToIdle < 0)
+            if(delayToIdle < 0)
                 animator.SetInteger("AnimState", 0);
         }
     }
@@ -123,7 +115,7 @@ public class Player : MonoBehaviour
 
     private void Attack()
     {
-        if (timeSinceAttack > 0.25f)
+        if(timeSinceAttack > 0.25f)
         {
             currentAttack++;
 
