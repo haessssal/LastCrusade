@@ -703,6 +703,8 @@ MonoBehaviour:
   nameText: {fileID: 1676099060}
   hpBar: {fileID: 632485886}
   mpBar: {fileID: 877396732}
+  hpText: {fileID: 601328187}
+  healthDecreaseSpeed: 0.5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1415,6 +1417,8 @@ MonoBehaviour:
   nameText: {fileID: 1506821551}
   hpBar: {fileID: 769224371}
   mpBar: {fileID: 1440442289}
+  hpText: {fileID: 1438653543}
+  healthDecreaseSpeed: 0.5
 --- !u!1 &877396730
 GameObject:
   m_ObjectHideFlags: 0
