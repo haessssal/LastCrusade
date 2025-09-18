@@ -2,29 +2,28 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-// win/lose 판정 및 아이템 
 public class MainManager : MonoBehaviour
 {
     public Transform player1SpawnPoint;
     public Transform player2SpawnPoint;
+    public PlayerUI p1UI;
+    public PlayerUI p2UI;
 
     public TextMeshProUGUI timerText;
-    // P1 UI
-    public TextMeshProUGUI p1NameText;
-    public TextMeshProUGUI p1HpText;
-    public TextMeshProUGUI p1MpText;
-    // P2 UI
-    public TextMeshProUGUI p2NameText;
-    public TextMeshProUGUI p2HpText;
-    public TextMeshProUGUI p2MpText;
-
     private float matchTime = 120f;
     private bool isMatchOver = false;
 
     private void Start()
     {
         SpawnCharacters();
-        SetPlayerUI();
+
+        // 플레이어 죽음 이벤트 구독
+        PlayerStats.OnPlayerDeath += CheckWinLose;
+    }
+
+    private void OnDestroy()
+    {
+        PlayerStats.OnPlayerDeath -= CheckWinLose;
     }
 
     private void Update()
@@ -37,27 +36,38 @@ public class MainManager : MonoBehaviour
             if (matchTime <= 0)
             {
                 isMatchOver = true;
-                // TODO
+                CheckDraw();
             }
         }
     }
 
-    private void SetPlayerUI()
+    private void CheckWinLose(int playerIndex)
     {
-        // P1 UI set
-        CharacterData p1Data = GameManager.instance.player1Data;
-        if (p1Data != null)
+        if (isMatchOver) return;
+
+        isMatchOver = true;
+        if (playerIndex == 1) Debug.Log("P2 승리!");
+        else if (playerIndex == 2) Debug.Log("P1 승리!");
+    }
+
+    private void CheckDraw()
+    {
+        PlayerStats[] allPlayers = Object.FindObjectsByType<PlayerStats>(FindObjectsSortMode.None);
+
+        PlayerStats p1 = null;
+        PlayerStats p2 = null;
+
+        foreach (var ps in allPlayers)
         {
-            p1NameText.text = p1Data.characterName;
-            p1HpText.text = p1Data.hp.ToString();
+            if (ps.playerIndex == 1) p1 = ps;
+            else if (ps.playerIndex == 2) p2 = ps;
         }
 
-        // P2 UI set
-        CharacterData p2Data = GameManager.instance.player2Data;
-        if (p2Data != null)
+        if (p1 != null && p2 != null)
         {
-            p2NameText.text = p2Data.characterName;
-            p2HpText.text = p2Data.hp.ToString();
+            if (p1.CurrentHp > 0 && p2.CurrentHp > 0) Debug.Log("무승부!");
+            else if (p1.CurrentHp < 0) Debug.Log("P2 승리!");
+            else Debug.Log("P1 승리!");
         }
     }
 
@@ -68,8 +78,13 @@ public class MainManager : MonoBehaviour
         if (p1Data != null)
         {
             GameObject player1Object = Instantiate(p1Data.characterPrefab, player1SpawnPoint.position, Quaternion.identity);
-            Player player1Script = player1Object.GetComponent<Player>();
-            if (player1Script != null) player1Script.SetCharacterStats(p1Data);
+            PlayerStats p1Stats = player1Object.GetComponent<PlayerStats>();
+            if (p1Stats != null)
+            {
+                p1Stats.InitializeStats(p1Data, 1);
+                player1Object.GetComponent<Player>().Initialize(p1Stats);
+            }
+            if (p1UI != null) p1UI.SetupPlayerUI(p1Stats, p1Data);
         }
 
         // P2 spawn
@@ -77,8 +92,13 @@ public class MainManager : MonoBehaviour
         if (p2Data != null)
         {
             GameObject player2Object = Instantiate(p2Data.characterPrefab, player2SpawnPoint.position, Quaternion.identity);
-            Player player2Script = player2Object.GetComponent<Player>();
-            if (player2Script != null) player2Script.SetCharacterStats(p2Data);
+            PlayerStats p2Stats = player2Object.GetComponent<PlayerStats>();
+            if (p2Stats != null)
+            {
+                p2Stats.InitializeStats(p2Data, 2);
+                player2Object.GetComponent<Player>().Initialize(p2Stats);
+            }
+            if (p2UI != null) p2UI.SetupPlayerUI(p2Stats, p2Data);
         }
     }
 }
