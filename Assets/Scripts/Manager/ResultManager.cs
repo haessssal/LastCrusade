@@ -68,7 +68,18 @@ public class ResultManager : MonoBehaviour
         GameManager.instance.player1Data = null;
         GameManager.instance.player2Data = null;
 
-        FadeManager.Instance.LoadScene("1.Ready");
+        FadeManager.Instance.LoadScene("2.Ready");
+    }
+
+    public void GoToMapScene()
+    {
+        GameManager.instance.p1Wins = 0;
+        GameManager.instance.p2Wins = 0;
+        GameManager.instance.matchCount = 0;
+        GameManager.instance.player1Data = null;
+        GameManager.instance.player2Data = null;
+
+        FadeManager.Instance.LoadScene("1.Map");
     }
 
     public void GoToTitleScene()

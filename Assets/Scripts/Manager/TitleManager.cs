@@ -5,6 +5,6 @@ public class TitleManager : MonoBehaviour
 {
     public void GoToReadyScene()
     {
-        FadeManager.Instance.LoadScene("1.Ready");
+        FadeManager.Instance.LoadScene("1.Map");
     }
 }

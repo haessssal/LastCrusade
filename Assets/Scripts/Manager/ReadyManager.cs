@@ -46,6 +46,6 @@ public class ReadyManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         
-        FadeManager.Instance.LoadScene("2.Main");
+        FadeManager.Instance.LoadScene("3.Main");
     }
 }

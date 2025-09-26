@@ -79,7 +79,7 @@ public class MainManager : MonoBehaviour
         // 2라운드까지 승패가 결정되지 않았을 경우 3라운드로
         else if (GameManager.instance.matchCount < 3) FadeManager.Instance.LoadScene("2.Main");
         // 3라운드까지 진행된 후 최종 결과로 이동
-        else FadeManager.Instance.LoadScene("3.Result");
+        else FadeManager.Instance.LoadScene("4.Result");
     }
 
 
