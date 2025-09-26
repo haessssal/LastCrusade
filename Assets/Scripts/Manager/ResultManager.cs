@@ -9,9 +9,12 @@ public class ResultManager : MonoBehaviour
     public GameObject resultPrefab;
     private List<GameObject> resultTextPool = new List<GameObject>(); // 오브젝트 풀링
     private const int MAXRESULTS = 10;
+    private WorldData currentWorldData;
 
     private void Awake()
     {
+        currentWorldData = GameManager.instance.GetCurrentWorldData();
+        Debug.Log($"ResultManager: Current World = {GameManager.instance.SelectedWorld}");
         RecordGameResult();
         UpdateResultView();
     }
@@ -19,16 +22,20 @@ public class ResultManager : MonoBehaviour
     private void RecordGameResult()
     {
         string result = "";
-        if (GameManager.instance.p1Wins > GameManager.instance.p2Wins || GameManager.instance.p1Wins < GameManager.instance.p2Wins)
-            result = $"{GameManager.instance.p1Wins}  :  {GameManager.instance.p2Wins}";
+        if (currentWorldData.p1Wins > currentWorldData.p2Wins || currentWorldData.p1Wins < currentWorldData.p2Wins)
+            result = $"{currentWorldData.p1Wins}  :  {currentWorldData.p2Wins}";
         else result = "DRAW";
 
-        GameManager.instance.matchResults.Add(result);
+        currentWorldData.matchResults.Add(result);
     }
 
     private void UpdateResultView()
     {
-        for (int i = 0; i < GameManager.instance.matchResults.Count; i++)
+        // 기존 풀 결과 초기화
+        for (int i = 0; i < resultTextPool.Count; i++) resultTextPool[i].SetActive(false);
+
+        // 현재 월드 결과
+        for (int i = 0; i < currentWorldData.matchResults.Count; i++)
         {
             GameObject resultObject;
             if (i < resultTextPool.Count)
@@ -43,15 +50,15 @@ public class ResultManager : MonoBehaviour
                 resultTextPool.Add(resultObject);
             }
 
-            int resultIndex = GameManager.instance.matchResults.Count - 1 - i;
+            int resultIndex = currentWorldData.matchResults.Count - 1 - i;
             if (resultIndex >= 0)
             {
                 TextMeshProUGUI resultText = resultObject.transform.Find("ResultText").GetComponent<TextMeshProUGUI>();
-                resultText.text = GameManager.instance.matchResults[resultIndex];
+                resultText.text = currentWorldData.matchResults[resultIndex];
             }
         }
 
-        if (GameManager.instance.matchResults.Count > MAXRESULTS)
+        if (currentWorldData.matchResults.Count > MAXRESULTS)
         {
             for (int i = MAXRESULTS; i < resultTextPool.Count; i++)
             {
@@ -60,11 +67,17 @@ public class ResultManager : MonoBehaviour
         }
     }
 
+    private void ResetCurrentWorldData()
+    {
+        currentWorldData.p1Wins = 0;
+        currentWorldData.p2Wins = 0;
+        currentWorldData.matchCount = 0;
+        // currentWorldData.matchResults.Clear();
+    }
+
     public void GoToReadyScene()
     {
-        GameManager.instance.p1Wins = 0;
-        GameManager.instance.p2Wins = 0;
-        GameManager.instance.matchCount = 0;
+        ResetCurrentWorldData();
         GameManager.instance.player1Data = null;
         GameManager.instance.player2Data = null;
 
@@ -73,9 +86,7 @@ public class ResultManager : MonoBehaviour
 
     public void GoToMapScene()
     {
-        GameManager.instance.p1Wins = 0;
-        GameManager.instance.p2Wins = 0;
-        GameManager.instance.matchCount = 0;
+        ResetCurrentWorldData();
         GameManager.instance.player1Data = null;
         GameManager.instance.player2Data = null;
 
@@ -84,9 +95,7 @@ public class ResultManager : MonoBehaviour
 
     public void GoToTitleScene()
     {
-        GameManager.instance.p1Wins = 0;
-        GameManager.instance.p2Wins = 0;
-        GameManager.instance.matchCount = 0;
+        ResetCurrentWorldData();
         GameManager.instance.player1Data = null;
         GameManager.instance.player2Data = null;
 

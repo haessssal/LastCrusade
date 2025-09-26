@@ -18,8 +18,11 @@ public class MainManager : MonoBehaviour
 
     public TextMeshProUGUI winnerText;
 
+    private WorldData currentWorldData;
+
     private void Start()
     {
+        currentWorldData = GameManager.instance.GetCurrentWorldData();
         winnerText.gameObject.SetActive(false);
         SpawnCharacters();
 
@@ -55,18 +58,18 @@ public class MainManager : MonoBehaviour
         if (p1Stats.CurrentHp > 0 && p2Stats.CurrentHp > 0) winnerText.text = "DRAW"; // time over
         else if (p1Stats.CurrentHp <= 0)
         {
-            GameManager.instance.p2Wins += 1;
+            currentWorldData.p2Wins += 1;
             winnerText.text = "WINNER: P2";
         }
 
         else if (p2Stats.CurrentHp <= 0)
         {
-            GameManager.instance.p1Wins += 1;
+            currentWorldData.p1Wins += 1;
             winnerText.text = "WINNER: P1";
         }
 
         winnerText.gameObject.SetActive(true);
-        GameManager.instance.matchCount += 1;
+        currentWorldData.matchCount += 1;
 
         StartCoroutine(GoToResultSceneAfterDelay());
     }
@@ -75,9 +78,9 @@ public class MainManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1.0f);
         
-        if (GameManager.instance.p1Wins >= 2 || GameManager.instance.p2Wins >= 2) FadeManager.Instance.LoadScene("3.Result");
+        if (currentWorldData.p1Wins >= 2 || currentWorldData.p2Wins >= 2) FadeManager.Instance.LoadScene("4.Result");
         // 2라운드까지 승패가 결정되지 않았을 경우 3라운드로
-        else if (GameManager.instance.matchCount < 3) FadeManager.Instance.LoadScene("2.Main");
+        else if (currentWorldData.matchCount < 3) FadeManager.Instance.LoadScene("3.Main");
         // 3라운드까지 진행된 후 최종 결과로 이동
         else FadeManager.Instance.LoadScene("4.Result");
     }
