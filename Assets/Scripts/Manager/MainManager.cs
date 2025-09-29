@@ -25,6 +25,7 @@ public class MainManager : MonoBehaviour
         currentWorldData = GameManager.instance.GetCurrentWorldData();
         winnerText.gameObject.SetActive(false);
         SpawnCharacters();
+        ApplyWorldEffect();
 
         // 플레이어 죽음 이벤트 구독
         PlayerStats.OnPlayerDeath += CheckWinLose;
@@ -77,14 +78,13 @@ public class MainManager : MonoBehaviour
     private IEnumerator GoToResultSceneAfterDelay()
     {
         yield return new WaitForSeconds(1.0f);
-        
+
         if (currentWorldData.p1Wins >= 2 || currentWorldData.p2Wins >= 2) FadeManager.Instance.LoadScene("4.Result");
         // 2라운드까지 승패가 결정되지 않았을 경우 3라운드로
         else if (currentWorldData.matchCount < 3) FadeManager.Instance.LoadScene("3.Main");
         // 3라운드까지 진행된 후 최종 결과로 이동
         else FadeManager.Instance.LoadScene("4.Result");
     }
-
 
     private void SpawnCharacters()
     {
@@ -125,9 +125,34 @@ public class MainManager : MonoBehaviour
         if (p1Stats != null) p1Stats.TakeDamage(20f);
     }
 
-    // [수정] P2에게 데미지를 입히는 테스트 함수
     public void P2Demage()
     {
         if (p2Stats != null) p2Stats.TakeDamage(20f);
+    }
+
+    private void ApplyWorldEffect()
+    {
+        WorldType selectedWorld = GameManager.instance.SelectedWorld;
+        GameObject effectObject = new GameObject(selectedWorld.ToString() + "Effect");
+        effectObject.transform.SetParent(this.transform);
+
+        WorldEffect effectComponent = null;
+
+        switch (selectedWorld)
+        {
+            case WorldType.Ceiling:
+                effectComponent = effectObject.AddComponent<CeilingEffect>();
+                break;
+            case WorldType.Ground:
+                effectComponent = effectObject.AddComponent<GroundEffect>();
+                break;
+            case WorldType.Gravity:
+                effectComponent = effectObject.AddComponent<GravityEffect>();
+                break;
+            case WorldType.Lightning:
+                effectComponent = effectObject.AddComponent<LightningEffect>();
+                break;
+        }
+    
     }
 }
