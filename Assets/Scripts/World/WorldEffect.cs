@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public abstract class WorldEffet : MonoBehaviour
+// 각 월드의 Effect 스크립트는 WorldEffect를 상속함
+public abstract class WorldEffect : MonoBehaviour
 {
     protected MainManager mainManager;
 

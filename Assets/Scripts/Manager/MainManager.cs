@@ -153,6 +153,8 @@ public class MainManager : MonoBehaviour
                 effectComponent = effectObject.AddComponent<LightningEffect>();
                 break;
         }
+
+        if (effectComponent != null) effectComponent.Initialize(this);
     
     }
 }
