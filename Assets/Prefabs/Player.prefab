@@ -121,7 +121,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 5
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -299,6 +299,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crusader
       objectReference: {fileID: 0}
+    - target: {fileID: 2918521990320252999, guid: 1912975f99cb5a04d8da4e3f4e6e4c30, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 71c7895d271ab49b4ab6fc91f4884646, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -16,6 +16,7 @@ public class PlayerWalkState : IState
     public void Enter()
     {
         animator.Play("Walk");
+        Debug.Log("Walk enter");
     }
 
     public void Execute()

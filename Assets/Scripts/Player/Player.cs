@@ -75,16 +75,8 @@ public class Player : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(dir * stats.moveSpeed, rb.linearVelocity.y);
 
-        if (dir > 0)
-        {
-            crusader.localScale = new Vector3(1, 1, 1);
-            Debug.Log("Moving Right");
-        }
-        else if (dir < 0)
-        {
-            crusader.localScale = new Vector3(-1, 1, 1);
-            Debug.Log("Moving Left");
-        }
+        if (dir > 0) crusader.localScale = new Vector3(1, 1, 1);
+        else if (dir < 0) crusader.localScale = new Vector3(-1, 1, 1);
     }
 
     public void Jump(float force)

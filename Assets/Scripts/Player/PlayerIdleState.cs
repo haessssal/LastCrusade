@@ -16,17 +16,12 @@ public class PlayerIdleState : IState
     public void Enter()
     {
         animator.Play("Idle");
+        Debug.Log("Idle enter");
     }
 
     public void Execute()
     {
         float xInput = player.GetMoveInput().x;
-
-        if (!player.IsGrounded)
-        {
-            stateMachine.ChangeState(player.jumpState);
-            return;
-        }
 
         if (Mathf.Abs(xInput) > 0.1f)
         {
