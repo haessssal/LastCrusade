@@ -16,6 +16,6 @@ MonoBehaviour:
   hp: 90
   mp: 45
   mpSpeed: 3
-  moveSpeed: 7
+  moveSpeed: 3
   attackSpeed: 3
-  characterPrefab: {fileID: 2063671535301401377, guid: d4bce184f720c4dc896cf20413a3e2bb, type: 3}
+  characterPrefab: {fileID: 3980623774439579307, guid: 0a35b89e7c09848099f30534356e44ac, type: 3}

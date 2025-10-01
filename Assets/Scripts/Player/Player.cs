@@ -1,147 +1,101 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(PlayerStats))]
+public class Player : MonoBehaviour
 {
-    [SerializeField] float jumpForce = 7.5f;
+    [Header("References")]
+    public Animator animator;
+    public Transform crusader;
 
-    private Animator animator;
-    private Rigidbody2D body2d;
-    private Sensor_HeroKnight groundSensor;
-    private Sensor_HeroKnight wallSensorR1;
-    private Sensor_HeroKnight wallSensorR2;
-    private Sensor_HeroKnight wallSensorL1;
-    private Sensor_HeroKnight wallSensorL2;
-    private bool isWallSliding = false;
-    private bool grounded = false;
-    private int facingDirection = 1;
-    private int currentAttack = 0;
-    private float timeSinceAttack = 0.0f;
-    private float delayToIdle = 0.0f;
-
-    private HeroControls heroControls;
-    private float inputX;
+    private Rigidbody2D rb;
     private PlayerStats stats;
+
+    [Header("Ground Check")]
+    public Transform groundCheck;
+    public LayerMask groundLayer;
+    public float groundCheckRadius = 0.2f;
+
+    private float moveInput;
+    private PlayerStateMachine stateMachine;
+
+    // States
+    [HideInInspector] public PlayerIdleState idleState;
+    [HideInInspector] public PlayerWalkState walkState;
+    [HideInInspector] public PlayerJumpState jumpState;
+
+    // Input System
+    public PlayerInput playerInput;
+    private InputAction moveAction;
+    private InputAction jumpAction;
+
+    public Rigidbody2D RB => rb;
+    public PlayerStats Stats => stats;
+    public bool IsGrounded { get; private set; }
 
     public void Initialize(PlayerStats playerStats)
     {
         stats = playerStats;
     }
 
-    void Start ()
+    private void Awake()
     {
-        animator = GetComponent<Animator>();
-        body2d = GetComponent<Rigidbody2D>();
-        groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_HeroKnight>();
-        wallSensorR1 = transform.Find("WallSensor_R1").GetComponent<Sensor_HeroKnight>();
-        wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor_HeroKnight>();
-        wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
-        wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
+        rb = GetComponent<Rigidbody2D>();
+        stats = GetComponent<PlayerStats>();
 
-        heroControls = new HeroControls();
-        heroControls.Player.Enable();
-        
-        // Move 값 저장
-        heroControls.Player.Move.performed += ctx => inputX = ctx.ReadValue<Vector2>().x;
-        heroControls.Player.Move.canceled += ctx => inputX = 0f;
+        moveAction = playerInput.actions["Move"];
+        jumpAction = playerInput.actions["Jump"];
 
-        // Jump와 Attack 함수 연결
-        heroControls.Player.Jump.performed += ctx => Jump();
-        heroControls.Player.Attack.performed += ctx => Attack();
+        stateMachine = new PlayerStateMachine();
+
+        idleState = new PlayerIdleState(this, stateMachine, animator);
+        walkState = new PlayerWalkState(this, stateMachine, animator);
+        jumpState = new PlayerJumpState(this, stateMachine, animator);
     }
-    
-    void Update ()
+
+    private void Start()
     {
-        timeSinceAttack += Time.deltaTime;
+        stateMachine.Initialize(idleState);
+    }
 
-        if (!grounded && groundSensor.State())
+    private void Update()
+    {
+        // 땅 체크
+        IsGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        // 상태 실행
+        stateMachine.CurrentState.Execute();
+    }
+
+    public Vector2 GetMoveInput() => moveAction.ReadValue<Vector2>();   
+    public bool IsJumpPressed() => jumpAction.WasPressedThisFrame();
+
+    public void Move(float dir)
+    {
+        rb.linearVelocity = new Vector2(dir * stats.moveSpeed, rb.linearVelocity.y);
+
+        if (dir > 0)
         {
-            grounded = true;
-            animator.SetBool("Grounded", grounded);
+            crusader.localScale = new Vector3(1, 1, 1);
+            Debug.Log("Moving Right");
         }
-
-        if (grounded && !groundSensor.State())
+        else if (dir < 0)
         {
-            grounded = false;
-            animator.SetBool("Grounded", grounded);
-        }
-
-        // -- Handle movement --
-        float inputX = this.inputX;
-
-        if (inputX > 0)
-        {
-            GetComponent<SpriteRenderer>().flipX = false;
-            facingDirection = 1;
-        }
-        else if (inputX < 0)
-        {
-            GetComponent<SpriteRenderer>().flipX = true;
-            facingDirection = -1;
-        }
-
-        body2d.linearVelocity = new Vector2(inputX * stats.moveSpeed, body2d.linearVelocity.y);
-        animator.SetFloat("AirSpeedY", body2d.linearVelocity.y);
-
-        // -- Handle Animations --
-        isWallSliding = (wallSensorR1.State() && wallSensorR2.State()) || (wallSensorL1.State() && wallSensorL2.State());
-        animator.SetBool("WallSlide", isWallSliding);
-            
-        if (Mathf.Abs(inputX) > Mathf.Epsilon)
-        {
-            delayToIdle = 0.05f;
-            animator.SetInteger("AnimState", 1);
-        }
-        else
-        {
-            delayToIdle -= Time.deltaTime;
-            if(delayToIdle < 0)
-                animator.SetInteger("AnimState", 0);
+            crusader.localScale = new Vector3(-1, 1, 1);
+            Debug.Log("Moving Left");
         }
     }
 
-    private void Jump()
+    public void Jump(float force)
     {
-        if (grounded)
-        {
-            animator.SetTrigger("Jump");
-            grounded = false;
-            animator.SetBool("Grounded", grounded);
-            body2d.linearVelocity = new Vector2(body2d.linearVelocity.x, jumpForce);
-            groundSensor.Disable(0.2f);
-        }
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, force);
     }
 
-    private void Attack()
+    private void OnDrawGizmosSelected()
     {
-        if(timeSinceAttack > 0.25f)
-        {
-            currentAttack++;
-
-            if (currentAttack > 3)
-                currentAttack = 1;
-
-            if (timeSinceAttack > 1.0f)
-                currentAttack = 1;
-
-            animator.SetTrigger("Attack" + currentAttack);
-            timeSinceAttack = 0.0f;
-        }
-    }
-
-    private void Hurt()
-    {
-        animator.SetTrigger("Hurt");
-    }
-
-    private void Death()
-    {
-        animator.SetTrigger("Death");
-    }
-
-    void OnDisable()
-    {
-        heroControls.Player.Disable();
+        if (groundCheck == null) return;
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     }
 }
