@@ -23,6 +23,7 @@ public class MainManager : MonoBehaviour
     private void Start()
     {
         currentWorldData = GameManager.instance.GetCurrentWorldData();
+        Debug.Log($"MainManager: Current World = {GameManager.instance.SelectedWorld}");
         winnerText.gameObject.SetActive(false);
         SpawnCharacters();
         ApplyWorldEffect();

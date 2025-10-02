@@ -75,8 +75,10 @@ public class Player : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(dir * stats.moveSpeed, rb.linearVelocity.y);
 
-        if (dir > 0) crusader.localScale = new Vector3(1, 1, 1);
-        else if (dir < 0) crusader.localScale = new Vector3(-1, 1, 1);
+        // if (dir > 0) crusader.localScale = new Vector3(1, 1, 1);
+        // else if (dir < 0) crusader.localScale = new Vector3(-1, 1, 1);
+        if (dir > 0) transform.localScale = new Vector3(0.27f, 0.27f, 1);
+        else if (dir < 0) transform.localScale = new Vector3(-0.27f, 0.27f, 1);
     }
 
     public void Jump(float force)
