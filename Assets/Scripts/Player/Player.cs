@@ -44,9 +44,6 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         stats = GetComponent<PlayerStats>();
 
-        moveAction = playerInput.actions["Move"];
-        jumpAction = playerInput.actions["Jump"];
-
         stateMachine = new PlayerStateMachine();
 
         idleState = new PlayerIdleState(this, stateMachine, animator);
@@ -56,6 +53,21 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        if (playerInput != null)
+        {
+            foreach (var map in playerInput.actions.actionMaps) map.Disable();
+
+            // 기본 Enable
+            var currentMap = playerInput.currentActionMap;
+            if (currentMap != null)
+            {
+                currentMap.Enable();
+                Debug.Log($"{gameObject.name} Enabled ActionMap: {currentMap.name}");
+            }
+        }
+
+        moveAction = playerInput.actions["Move"];
+        jumpAction = playerInput.actions["Jump"];
         stateMachine.Initialize(idleState);
     }
 

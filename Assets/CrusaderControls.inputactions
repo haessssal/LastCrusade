@@ -3,7 +3,7 @@
     "name": "CrusaderControls",
     "maps": [
         {
-            "name": "Player",
+            "name": "Player1",
             "id": "f9ecf39a-bd33-412b-9ac0-0aebcfe630bc",
             "actions": [
                 {
@@ -63,6 +63,76 @@
                     "name": "right",
                     "id": "30a4b7f0-9999-4e3c-a0c5-4f535e40bbb2",
                     "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Player2",
+            "id": "fded7639-fe94-443a-b1fa-e09fef5eeecd",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Value",
+                    "id": "fbee1670-bb93-4222-bfc1-736d3bca7510",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "8f98ffb7-cf97-4748-a8d2-b8659321c85a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "5da9f546-2708-457b-b385-073bceb7eb60",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "2D Vector",
+                    "id": "6d7f4964-5987-4547-b68d-bfbc17c420ab",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "left",
+                    "id": "7b3052e8-4ccb-4ae5-a521-5f595012c28d",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "e153c1ee-6dfb-4f12-92c5-ac99ea17c9c5",
+                    "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

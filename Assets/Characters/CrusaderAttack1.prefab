@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8653719598885068355, guid: db3cf23209973024685d791b0e812fcd, type: 3}
       propertyPath: m_Name
-      value: Crusader_Attack1
+      value: CrusaderAttack1
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: db3cf23209973024685d791b0e812fcd, type: 3}
       propertyPath: m_LocalPosition.x

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class MainManager : MonoBehaviour
 {
@@ -101,6 +102,13 @@ public class MainManager : MonoBehaviour
                 player1Object.GetComponent<Player>().Initialize(p1Stats);
             }
 
+            var p1Input = player1Object.GetComponent<PlayerInput>();
+            if (p1Input != null)
+            {
+                p1Input.SwitchCurrentActionMap("Player1");
+                Debug.Log("P1: Player1 Action Map");
+            }
+
             if (p1UI != null) p1UI.SetupPlayerUI(p1Stats, p1Data);
         }
 
@@ -114,6 +122,13 @@ public class MainManager : MonoBehaviour
             {
                 p2Stats.InitializeStats(p2Data, 2);
                 player2Object.GetComponent<Player>().Initialize(p2Stats);
+            }
+
+            var p2Input = player2Object.GetComponent<PlayerInput>();
+            if (p2Input != null)
+            {
+                p2Input.SwitchCurrentActionMap("Player2");
+                Debug.Log("P2: Player2 Action Map");
             }
 
             if (p2UI != null) p2UI.SetupPlayerUI(p2Stats, p2Data);
