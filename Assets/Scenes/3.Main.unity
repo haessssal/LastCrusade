@@ -704,7 +704,10 @@ MonoBehaviour:
   hpBar: {fileID: 632485886}
   mpBar: {fileID: 877396732}
   hpText: {fileID: 601328187}
-  healthDecreaseSpeed: 0.5
+  hpIncreaseSpeed: 2
+  hpDecreaseSpeed: 1
+  mpIncreaseSpeed: 2
+  mpDecreaseSpeed: 1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1418,7 +1421,10 @@ MonoBehaviour:
   hpBar: {fileID: 769224371}
   mpBar: {fileID: 1440442289}
   hpText: {fileID: 1438653543}
-  healthDecreaseSpeed: 0.5
+  hpIncreaseSpeed: 2
+  hpDecreaseSpeed: 1
+  mpIncreaseSpeed: 2
+  mpDecreaseSpeed: 1
 --- !u!1 &877396730
 GameObject:
   m_ObjectHideFlags: 0
@@ -2411,11 +2417,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
   itemPrefabs:
-  - {fileID: 0}
+  - {fileID: 34937232361830552, guid: 9da7a9c1efc7947e6b880501319201fb, type: 3}
+  - {fileID: 7499504934302472179, guid: bc00a6fb9bc114d289a3d12797227a7d, type: 3}
   itemSpawnPoints:
   - {fileID: 1038530559}
   itemTimerImage: {fileID: 2131949947}
-  itemSpawnTime: 10
+  itemSpawnTime: 3
 --- !u!4 &1437956046
 Transform:
   m_ObjectHideFlags: 0

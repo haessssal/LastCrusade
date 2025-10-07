@@ -17,6 +17,10 @@ public class ItemPickup : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         PlayerStats player = collision.GetComponent<PlayerStats>();
-        if (player != null) itemManager.ItemPickedUp(player, gameObject);
+        if (player != null)
+        {
+            Debug.Log($"{player.name}: {gameObject.name} 획득");
+            itemManager.ItemPickedUp(player, gameObject);
+        }
     }
 }
