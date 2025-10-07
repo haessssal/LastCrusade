@@ -12,7 +12,7 @@ public class CeilingEffect : WorldEffect
 
     // ani settings
     [SerializeField] private float dropDuration = 0.5f; // 한쪽이 쿵 하고 내려오는 시간
-    [SerializeField] private float waitBetweenDrops = 1.0f; // 한쪽이 내려온 후 다음 쪽이 내려오기까지 그 사이 시간
+    [SerializeField] private float waitBetweenDrops = 3.0f; // 한쪽이 내려온 후 다음 쪽이 내려오기까지 그 사이 시간
     [SerializeField] private float maxRotationAngle = 5f; // 최대 기울임 각도
 
     private Sequence collapseSequence;
@@ -51,47 +51,55 @@ public class CeilingEffect : WorldEffect
         {
             // 붕괴 시간에 맞추어 targetY 값을 점진적으로 감소시킴
             float collapseRate = (startHeight - endHeight) / collapseDuration;
-        
+
             targetY -= collapseRate * Time.deltaTime;
-            targetY = Mathf.Max(targetY, endHeight); 
+            targetY = Mathf.Max(targetY, endHeight);
         }
     }
 
     private void OnDestroy()
     {
-        if (collapseSequence != null)  collapseSequence.Kill();
+        if (collapseSequence != null) collapseSequence.Kill();
     }
-
-    IEnumerator StartCollapse()
+    
+    private IEnumerator StartCollapse()
     {
-        targetY = endHeight;
-        yield return new WaitForSeconds(1f);
-        StartDropSequence();
+        // 시작 높이
+        float leftY = startHeight; // 좌측 끝 Y
+        float rightY = startHeight; // 우측 끝 Y
+
+        bool isLeft = true; // 좌측부터 쿵
+        float dropAmount = 0.2f; // 쿵할 때 내려가는 높이
+
+        while (true)
+        {
+            Transform target = ceilingObject;
+
+            if (isLeft)
+            {
+                // 좌측 하강
+                float newY = Mathf.Max(leftY - dropAmount, endHeight);
+                leftY = newY;
+
+                target.DOMoveY(newY, dropDuration).SetEase(Ease.OutBounce);
+                target.DOLocalRotate(new Vector3(0, 0, maxRotationAngle), dropDuration).SetEase(Ease.OutBounce); // 좌측 기울기
+            }
+
+            else
+            {
+                // 우측 하강
+                float newY = Mathf.Max(rightY - dropAmount, endHeight);
+                rightY = newY;
+
+                target.DOMoveY(newY, dropDuration).SetEase(Ease.OutBounce);
+                target.DOLocalRotate(new Vector3(0, 0, -maxRotationAngle), dropDuration).SetEase(Ease.OutBounce); // 우측 기울기
+            }
+
+            isLeft = !isLeft; // 좌우 교대
+
+            // 기다림
+            yield return new WaitForSeconds(dropDuration + waitBetweenDrops);
+        }
     }
 
-    private void StartDropSequence()
-    {
-        collapseSequence = DOTween.Sequence(); // 새 시퀀스 생성
-
-        // 1. 좌측 하강
-        collapseSequence.Append(
-            ceilingObject.DOBlendableLocalRotateBy(new Vector3(0, 0, maxRotationAngle), dropDuration)
-            .SetEase(Ease.OutBounce) // 쿵
-        );
-
-        // 2. 기다림
-        collapseSequence.AppendInterval(waitBetweenDrops);
-
-        // 3. 우측 하강
-        collapseSequence.Append(
-            ceilingObject.DOBlendableLocalRotateBy(new Vector3(0, 0, -maxRotationAngle * 2), dropDuration * 2) // 반대쪽으로 2배 회전
-            .SetEase(Ease.OutBounce)
-        );
-
-        // 4. 기다림
-        collapseSequence.AppendInterval(waitBetweenDrops);
-
-        // 반복
-        collapseSequence.SetLoops(-1, LoopType.Restart);
-    }
 }
