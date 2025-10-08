@@ -374,7 +374,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 339669378}
         m_TargetAssemblyTypeName: ReadyManager, Assembly-CSharp
-        m_MethodName: SelectCharacter
+        m_MethodName: SelectCharacterP2
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: c92aa5600a0fd4cdeb888dc371ef319a, type: 2}
@@ -867,7 +867,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 339669378}
         m_TargetAssemblyTypeName: ReadyManager, Assembly-CSharp
-        m_MethodName: SelectCharacter
+        m_MethodName: SelectCharacterP2
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 132e130c95e6542faaab6b62b4fa2945, type: 2}
@@ -906,15 +906,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f21c4330421d4b18b664dfd73c25aa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReadyManager
-  characterNameText: {fileID: 1850463650}
-  characterPreviewParent: {fileID: 1673504984}
-  statsVisualizer: {fileID: 611967334}
-  statLabelTexts:
-  - {fileID: 1491697862}
-  - {fileID: 502036674}
-  - {fileID: 974629975}
-  - {fileID: 496216211}
-  - {fileID: 1674045011}
+  player1Section:
+    characterNameText: {fileID: 1912777916}
+    characterPreviewParent: {fileID: 1889271171}
+    statsVisualizer: {fileID: 1421760060}
+    statLabelTexts:
+    - {fileID: 2128790945}
+    - {fileID: 239421601}
+    - {fileID: 1525567307}
+    - {fileID: 548690631}
+    - {fileID: 785105813}
+    currentSelectedData: {fileID: 0}
+    currentPreviewInstance: {fileID: 0}
+  player2Section:
+    characterNameText: {fileID: 1850463650}
+    characterPreviewParent: {fileID: 1673504984}
+    statsVisualizer: {fileID: 611967334}
+    statLabelTexts:
+    - {fileID: 496216211}
+    - {fileID: 1674045011}
+    - {fileID: 974629975}
+    - {fileID: 1491697862}
+    - {fileID: 502036674}
+    currentSelectedData: {fileID: 0}
+    currentPreviewInstance: {fileID: 0}
   maxHP: 100
   maxMP: 100
   maxMpSpeed: 10
@@ -2804,7 +2819,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 339669378}
         m_TargetAssemblyTypeName: ReadyManager, Assembly-CSharp
-        m_MethodName: SelectCharacter
+        m_MethodName: SelectCharacterP1
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 1aad5a14d158e4a759cbc1da49e4e38b, type: 2}
@@ -3432,7 +3447,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 339669378}
         m_TargetAssemblyTypeName: ReadyManager, Assembly-CSharp
-        m_MethodName: SelectCharacter
+        m_MethodName: SelectCharacterP1
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: c92aa5600a0fd4cdeb888dc371ef319a, type: 2}
@@ -3765,7 +3780,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 339669378}
         m_TargetAssemblyTypeName: ReadyManager, Assembly-CSharp
-        m_MethodName: SelectCharacter
+        m_MethodName: SelectCharacterP1
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 132e130c95e6542faaab6b62b4fa2945, type: 2}
@@ -4676,7 +4691,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 339669378}
         m_TargetAssemblyTypeName: ReadyManager, Assembly-CSharp
-        m_MethodName: SelectCharacter
+        m_MethodName: SelectCharacterP2
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: 1aad5a14d158e4a759cbc1da49e4e38b, type: 2}
@@ -4944,7 +4959,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 339669378}
         m_TargetAssemblyTypeName: ReadyManager, Assembly-CSharp
-        m_MethodName: SelectCharacter
+        m_MethodName: SelectCharacterP2
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: d863bbb4a05e04cc3a7098a900e8cd7d, type: 2}
@@ -5212,7 +5227,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 339669378}
         m_TargetAssemblyTypeName: ReadyManager, Assembly-CSharp
-        m_MethodName: SelectCharacter
+        m_MethodName: SelectCharacterP1
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: d863bbb4a05e04cc3a7098a900e8cd7d, type: 2}

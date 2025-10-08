@@ -5,16 +5,21 @@ using TMPro;
 
 public class ReadyManager : MonoBehaviour
 {
-    private CharacterData selectedCharacter;
-    private GameObject currentPreviewInstance;
+    [System.Serializable]
+    public class PlayerUISection
+    {
+        public TextMeshProUGUI characterNameText;
+        public Transform characterPreviewParent; 
+        public StatsVisualizer statsVisualizer;
+        public TextMeshProUGUI[] statLabelTexts = new TextMeshProUGUI[5]; // 각 섹션의 스탯명 텍스트
+        public CharacterData currentSelectedData; // 현재 선택된 캐릭터 데이터
+        [HideInInspector] public GameObject currentPreviewInstance; // 현재 나타내는 프리팹 인스턴스
+    }
 
-    [Header("UI References")]
-    public TextMeshProUGUI characterNameText;
-    public Transform characterPreviewParent; 
-    public StatsVisualizer statsVisualizer;
-
-    [Header("Stat Label Texts")]
-    public TextMeshProUGUI[] statLabelTexts = new TextMeshProUGUI[5]; // 스탯명 텍스트
+    [Header("Player UI Sections")]
+    public PlayerUISection player1Section; 
+    public PlayerUISection player2Section;
+    
     private readonly string[] STATNAMES = { "HP", "MP", "MP S.", "Move S.", "Attack S." };
     
     [Header("Stat Max Values for Normalization")]
@@ -24,51 +29,64 @@ public class ReadyManager : MonoBehaviour
     public float maxMoveSpeed = 10f;
     public float maxAttackSpeed = 5f;
 
-    public void SelectCharacter(CharacterData characterData)
-    {
-        selectedCharacter = characterData;
+    public enum PlayerID { Player1, Player2 }
 
-        // 1. 이름 출력
-        characterNameText.text = characterData.characterName;
-        // 2. prefab 출력
-        UpdateCharacterPreview(characterData.characterPrefab);
-        // 3. 스탯 graph 출력
-        UpdateStatsGraph(characterData);
-        // 4. 스탯명 텍스트 출력
-        UpdateStatLabels();
+    public void SelectCharacterP1(CharacterData characterData)
+    {
+        SelectCharacter(PlayerID.Player1, characterData);
     }
 
-    private void UpdateCharacterPreview(GameObject prefab)
+    public void SelectCharacterP2(CharacterData characterData)
+    {
+        SelectCharacter(PlayerID.Player2, characterData);
+    }
+
+    public void SelectCharacter(PlayerID pID, CharacterData characterData)
+    {
+        PlayerUISection section = (pID == PlayerID.Player1) ? player1Section : player2Section;
+        section.currentSelectedData = characterData;
+
+        // 1. 이름 출력
+        section.characterNameText.text = section.currentSelectedData.characterName;
+        // 2. prefab 출력
+        UpdateCharacterPreview(section, section.currentSelectedData.characterPrefab);
+        // 3. 스탯 graph 출력
+        UpdateStatsGraph(section, section.currentSelectedData);
+        // 4. 스탯명 텍스트 출력
+        UpdateStatLabels(section);
+    }
+
+    private void UpdateCharacterPreview(PlayerUISection pSection, GameObject prefab)
     {
         // 이전 프리뷰 제거
-        if (currentPreviewInstance != null) Destroy(currentPreviewInstance);
+        if (pSection.currentPreviewInstance != null) Destroy(pSection.currentPreviewInstance);
 
-        if (prefab != null && characterPreviewParent != null)
+        if (prefab != null && pSection.characterPreviewParent != null)
         {
             // 새 프리팹 인스턴스화: 부모의 Transform을 따라감
-            currentPreviewInstance = Instantiate(prefab, characterPreviewParent, true);
+            pSection.currentPreviewInstance = Instantiate(prefab, pSection.characterPreviewParent, true);
             
             // 로컬 위치/회전 초기화: 부모의 RectTransform 기준
-            currentPreviewInstance.transform.localScale = new Vector3(1f, 1f, 1f); 
-            currentPreviewInstance.transform.localPosition = new Vector3(0f, 0f, 0f);
-            currentPreviewInstance.transform.localScale = Vector3.one;
+            pSection.currentPreviewInstance.transform.localScale = new Vector3(1f, 1f, 1f); 
+            pSection.currentPreviewInstance.transform.localPosition = new Vector3(0f, 0f, 0f);
+            pSection.currentPreviewInstance.transform.localScale = Vector3.one;
             
             // 물리 비활성화: 애니메이션만 돌도록
-            Rigidbody2D rb = currentPreviewInstance.GetComponent<Rigidbody2D>();
+            Rigidbody2D rb = pSection.currentPreviewInstance.GetComponent<Rigidbody2D>();
             if (rb != null) rb.simulated = false;
         }
     }
     
-    private void UpdateStatLabels()
+    private void UpdateStatLabels(PlayerUISection pSection)
     {
-        if (statLabelTexts.Length != STATNAMES.Length) return;
+        if (pSection.statLabelTexts.Length != STATNAMES.Length) return;
 
-        for (int i = 0; i < STATNAMES.Length; i++) statLabelTexts[i].text = STATNAMES[i];
+        for (int i = 0; i < STATNAMES.Length; i++) pSection.statLabelTexts[i].text = STATNAMES[i];
     }
     
-    private void UpdateStatsGraph(CharacterData data)
+    private void UpdateStatsGraph(PlayerUISection pSection, CharacterData data)
     {
-        if (statsVisualizer == null) return;
+        if (pSection.statsVisualizer == null) return;
 
         // 1. 각 스탯을 전역 최대값으로 정규화
         float hpRatio = data.hp / maxHP;
@@ -78,7 +96,7 @@ public class ReadyManager : MonoBehaviour
         float attackSpeedRatio = data.attackSpeed / maxAttackSpeed;
 
         // 2. 그래프 컴포넌트에 데이터 전달 및 UI 업데이트
-        statsVisualizer.SetStatValues(
+        pSection.statsVisualizer.SetStatValues(
             Mathf.Clamp01(hpRatio),
             Mathf.Clamp01(mpRatio),
             Mathf.Clamp01(mpSpeedRatio),
@@ -89,14 +107,14 @@ public class ReadyManager : MonoBehaviour
 
     public void ConfirmCharacter1()
     {
-        GameManager.instance.player1Data = selectedCharacter;
+        GameManager.instance.player1Data = player1Section.currentSelectedData;
         Debug.Log("P1: " + GameManager.instance.player1Data.characterName);
         CheckTransition();
     }
 
     public void ConfirmCharacter2()
     {
-        GameManager.instance.player2Data = selectedCharacter;
+        GameManager.instance.player2Data = player2Section.currentSelectedData;
         Debug.Log("P2: " + GameManager.instance.player2Data.characterName);
         CheckTransition();
     }
