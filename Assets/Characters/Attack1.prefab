@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8653719598885068355, guid: db3cf23209973024685d791b0e812fcd, type: 3}
       propertyPath: m_Name
-      value: CrusaderAttack1
+      value: Crusader_Attack1
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: db3cf23209973024685d791b0e812fcd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -55,5 +55,35 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: db3cf23209973024685d791b0e812fcd, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 755672136349921135}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: db3cf23209973024685d791b0e812fcd, type: 3}
+--- !u!1 &8004930184140459160 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8653719598885068355, guid: db3cf23209973024685d791b0e812fcd, type: 3}
+  m_PrefabInstance: {fileID: 7561814567343369509}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &755672136349921135
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8004930184140459160}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4865ed834f5be2b40ac90d6c0d852c53, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

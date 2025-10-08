@@ -21,6 +21,12 @@ public class PlayerIdleState : IState
 
     public void Execute()
     {
+        if (player.IsAttack1Pressed())
+        {
+            stateMachine.ChangeState(player.attack1State);
+            return;
+        }
+
         float xInput = player.GetMoveInput().x;
 
         if (Mathf.Abs(xInput) > 0.1f)

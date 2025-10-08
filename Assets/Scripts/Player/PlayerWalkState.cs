@@ -21,6 +21,12 @@ public class PlayerWalkState : IState
 
     public void Execute()
     {
+        if (player.IsAttack1Pressed())
+        {
+            stateMachine.ChangeState(player.attack1State);
+            return;
+        }
+        
         float xInput = player.GetMoveInput().x;
         player.Move(xInput);
 

@@ -24,11 +24,13 @@ public class Player : MonoBehaviour
     [HideInInspector] public PlayerIdleState idleState;
     [HideInInspector] public PlayerWalkState walkState;
     [HideInInspector] public PlayerJumpState jumpState;
+    [HideInInspector] public PlayerAttack1State attack1State;
 
     // Input System
     public PlayerInput playerInput;
     private InputAction moveAction;
     private InputAction jumpAction;
+    private InputAction attack1Action;
 
     public Rigidbody2D RB => rb;
     public PlayerStats Stats => stats;
@@ -49,6 +51,7 @@ public class Player : MonoBehaviour
         idleState = new PlayerIdleState(this, stateMachine, animator);
         walkState = new PlayerWalkState(this, stateMachine, animator);
         jumpState = new PlayerJumpState(this, stateMachine, animator);
+        attack1State = new PlayerAttack1State(this, stateMachine, animator);
     }
 
     private void Start()
@@ -68,6 +71,7 @@ public class Player : MonoBehaviour
 
         moveAction = playerInput.actions["Move"];
         jumpAction = playerInput.actions["Jump"];
+        attack1Action = playerInput.actions["Attack1"];
         stateMachine.Initialize(idleState);
     }
 
@@ -82,6 +86,7 @@ public class Player : MonoBehaviour
 
     public Vector2 GetMoveInput() => moveAction.ReadValue<Vector2>();   
     public bool IsJumpPressed() => jumpAction.WasPressedThisFrame();
+    public bool IsAttack1Pressed() => attack1Action.WasPressedThisFrame();
 
     public void Move(float dir)
     {

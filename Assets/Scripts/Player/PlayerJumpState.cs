@@ -5,7 +5,7 @@ public class PlayerJumpState : IState
     private Player player;
     private PlayerStateMachine stateMachine;
     private Animator animator;
-    private bool hasJumped;
+    // private bool hasJumped;
 
     public PlayerJumpState(Player player, PlayerStateMachine stateMachine, Animator animator)
     {
@@ -16,18 +16,24 @@ public class PlayerJumpState : IState
 
     public void Enter()
     {
-        hasJumped = false;
+        // hasJumped = false;
         animator.Play("JumpStart");
         Debug.Log("Jump enter");
 
         player.Jump(8f);
-        hasJumped = true;
+        // hasJumped = true;
     }
 
     public void Execute()
     {
         float xInput = player.GetMoveInput().x;
         player.Move(xInput);
+        
+        if (player.IsAttack1Pressed())
+        {
+            stateMachine.ChangeState(player.attack1State);
+            return;
+        }
 
         if (player.IsGrounded && player.RB.linearVelocity.y <= 0.1f)
         {
@@ -36,6 +42,7 @@ public class PlayerJumpState : IState
                 stateMachine.ChangeState(player.idleState);
                 Debug.Log("Jump End: Back to Idle");
             }
+
             else stateMachine.ChangeState(player.walkState);
         }
     }
