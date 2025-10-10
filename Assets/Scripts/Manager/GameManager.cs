@@ -4,9 +4,9 @@ using System.Collections.Generic;
 public enum WorldType
 {
     Ceiling,
-    Ground,
+    Lightning,
     Gravity,
-    Lightning
+    Ground
 }
 
 public class GameManager : MonoBehaviour
